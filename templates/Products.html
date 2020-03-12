@@ -10,16 +10,19 @@
 </head>
 <body>  
 
- <div id="product-grid">
+ <div class="container">
   <div class="txt-heading">Products</div>
+  <div class="card-deck">
 
   {% for product in products %}
 
-   <div class="product-item">
+   <div>
     <form method="post" action="/add">
 
       <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="/static/images/{{ product.image }}" alt="Card image cap">
+        <div class="container" style="display: flex; justify-content: center;"> 
+          <img class="card-img-top" style="width: auto; height: 100px" src="/static/images/{{ product.image }}" alt="Card image cap"> 
+        </div>
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">₹ {{ product.price }}</p>
@@ -29,13 +32,14 @@
         </ul>
         <div class="card-body">
           <input type="hidden" name="code" value="{{ product.code }}"/>
-          <input type="submit" value="Add to Cart" class="card-link" />
+          <input type="submit" value="Add to Cart" class="btn btn-primary" />
         </div>
       </div>
     </form>
    </div>
 
   {% endfor %}
+ </div>
  
  </div>
 </body>
