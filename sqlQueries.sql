@@ -28,7 +28,7 @@ CREATE TABLE admins (
 
 INSERT INTO users VALUES ('bratk9','290799');
 INSERT INTO users VALUES ('hpeonix','110399');
-INSERT INTO users VALUES ('roja','210599');
+INSERT INTO users VALUES ('roja','210500');
 
 INSERT INTO admins VALUES ('admin1','default');
 INSERT INTO admins VALUES ('admin2','default');
