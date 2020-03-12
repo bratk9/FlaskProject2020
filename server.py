@@ -3,7 +3,9 @@ from app import app
 from db_config import mysql
 from flask import flash, session, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-  
+
+global user1
+
 @app.route('/add', methods=['POST'])
 def add_product_to_cart():
  cursor = None
@@ -60,6 +62,44 @@ def add_product_to_cart():
   conn.close()
   
 @app.route('/')
+def home():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+  global user1
+  conn = mysql.connect()
+  cursor = conn.cursor(pymysql.cursors.DictCursor)
+  if request.form['choice'] == 'customer':
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    users = {}
+    for i in rows:
+      users[i['userid']] = i['pass']
+    if request.form['username'] in users and users[request.form['username']] == request.form['password']:
+      user1 = request.form['username']
+      session['logged_in'] = True
+      return redirect('/loggedin_user')
+    else:
+        return redirect('/error')
+  elif request.form['choice'] == 'admin':
+    cursor.execute("SELECT * FROM admins")
+    rows = cursor.fetchall()
+    admins = {}
+    for i in rows:
+      admins[i['userid']] = i['pass']
+    if request.form['username'] in admins and admins[request.form['username']] == request.form['password']:
+      user1 = request.form['username']
+      session['logged_in'] = True
+      return redirect('/loggedin_user')          #NEEDS TO BE CHANGED TO ADMIN'S LOGIN
+    else:
+        return redirect('/error')
+
+@app.route('/error')
+def err():
+    return "ERROR404: Credentials not found. :("
+
+@app.route('/loggedin_user')
 def products():
  try:
   conn = mysql.connect()
