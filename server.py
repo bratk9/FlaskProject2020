@@ -120,4 +120,4 @@ def array_merge( first_array , second_array ):
  return False  
   
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
