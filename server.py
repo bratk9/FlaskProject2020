@@ -77,9 +77,23 @@ def products():
 def empty_cart():
  try:
   session.clear()
-  return redirect(url_for('.products'))
+  return redirect(url_for('.kart'))
  except Exception as e:
   print(e)
+
+@app.route('/cart')
+def kart():
+ try:
+  conn = mysql.connect()
+  cursor = conn.cursor(pymysql.cursors.DictCursor)
+  cursor.execute("SELECT * FROM product")
+  rows = cursor.fetchall()
+  return render_template('cart.html', products=rows)
+ except Exception as e:
+  print(e)
+ finally:
+  cursor.close() 
+  conn.close()
 
 @app.route('/delete/<string:code>')
 def delete_product(code):
@@ -106,7 +120,7 @@ def delete_product(code):
    session['all_total_price'] = all_total_price
   
   #return redirect('/')
-  return redirect(url_for('.products'))
+  return redirect(url_for('.cart'))
  except Exception as e:
   print(e)
   
