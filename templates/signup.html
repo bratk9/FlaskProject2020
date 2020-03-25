@@ -6,7 +6,7 @@
             <form method="POST" action="">
                 <div class="container">
                     <div class="justify-content-center text-center">
-                        <h1 class="text-uppercase mb-5">LogIn</h1>
+                        <h1 class="text-uppercase mb-5">Sign up</h1>
                     </div>
                 </div>
                 {{ form.hidden_tag() }}
@@ -26,6 +26,7 @@
                 <div class="form-group mb-5">
                     {{ form.Password.label(class="form-label") }}
                     {% if form.Password.errors %}
+                    <span>{{ error }}</span>
                     {{ form.Password(class="form-control text-white bg-transparent rounded-pill is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.Password.errors %}
@@ -36,12 +37,29 @@
                     {{ form.Password(class="form-control border border-info rounded-pill text-white bg-transparent") }}
                     {% endif%}
                 </div>
+                
+                <div class="form-group mb-5">
+                    {{ form.confirmPassword.label(class="form-label") }}
+                    {% if form.confirmPassword.errors %}
+                    <span>{{ error }}</span>
+                    {{ form.confirmPassword(class="form-control text-white bg-transparent rounded-pill is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirmPassword.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.confirmPassword(class="form-control border border-info rounded-pill text-white bg-transparent") }}
+                    {% endif%}
+                </div>
+
                 <div class="form-group mb-5">
                     <div class="custom-control custom-switch">
-                        {{ form.Remember(class="custom-control-input text-white bg-transparent") }}
-                        {{ form.Remember.label(class="custom-control-label") }}
+                        {{ form.admin(class="custom-control-input text-white bg-transparent") }}
+                        {{ form.admin.label(class="custom-control-label") }}
                     </div>
-                </div> 
+                </div>
+
                 <div class="form-group mb-5 text-center">
                     {{ form.Submit(class="btn btn-outline-info") }}
                 </div>

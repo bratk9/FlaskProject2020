@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <title>
+            Shoe Shop
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="body">
+
+            <div style="position: absolute; top: 0; right: 0;z-index:2;" class="">
+  
+                {% with messages = get_flashed_messages(with_categories=true) %}
+        
+                {% if messages %}
+        
+                {% for catagory,message in messages %}
+        
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+                    <div class="toast-header">
+                        <img src="{{ url_for('static', filename='background.jpg') }}" style="width: 10%;height:10%;" class="rounded mr-2" alt="...">
+                        <strong class="mr-auto">Shoe Shop</strong>
+                        <small class="text-{{catagory}}">{{catagory}}</small>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        {{message}}
+                    </div>
+                </div>
+        
+                {% endfor %}
+        
+                {% endif %}
+        
+                {% endwith %}
+        
+            </div>
+
+            <div class="text-center text-white">
+                <div><h1>Shoe Shop</h1></div>
+              </div>
+
+            <nav class="navbar sticky-top navbar-expand-md navbar-dark" style="background-color: rgba(0, 0, 0, 0.75);z-index:1;">
+                <a class="navbar-brand" href="{{ url_for('lnding') }}">Shoe Shop</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-info" href="{{ url_for('lnding') }}">Home</a>
+                        </li>
+                        {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                        <li class="nav-item dropdown">
+                            <a class="text-info nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Product Dashboard
+                            </a>
+                            <div class="dropdown-menu custom-bg-translucent" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item text-info" href="{{ url_for('addProduct') }}">Add Products</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-info" href="#">User Dashboard</a>
+                        </li>
+                        {% endif %}
+                        {% endif%}
+                    </ul>
+                    <ul class="navbar-nav">
+                        
+                        {% if current_user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="text-info nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{current_user.username}}
+                            </a>
+                            <div class="dropdown-menu custom-bg-translucent" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item text-info" href="{{ url_for('booking_history') }}">History</a>
+                                    <a class="dropdown-item text-info" href="{{ url_for('logout') }}">Logout</a>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link text-info" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-info" href="{{ url_for('signup') }}">Signup</a>
+                        </li>
+                        {% endif%}
+                        <li class="nav-item">
+                            <a class="nav-link text-info" href="{{ url_for('showcart') }}">My Cart</a>
+                        </li>
+                    </ul>
+                  </div>
+            </nav>
+
+
+            
+        
+            <script>
+                $(document).ready(function()
+                    {
+                        $(".toast").toast('show');
+                    });
+            </script>
+
+
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+    <style>
+        .custom-bg-translucent
+        {
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+        .body
+        {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            background-attachment: fixed;
+            overflow: auto;
+            z-index: 0;
+        }
+        html,body
+        {
+            width: 100%;
+            height: 100%;
+        }
+        body
+        {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            z-index: -1;
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+        }
+    </style>
+</html>
