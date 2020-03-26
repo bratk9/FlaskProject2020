@@ -82,7 +82,7 @@ def login():
             
             return redirect(next_pg) if next_pg else redirect(url_for("lnding"))
         else:
-            flash('login failed for {}. Make sure you are signed up.'.format(loginpage.Username.data),"warning")
+            flash('login failed. Make sure you are signed up.',"warning")
         
     return render_template("Login.html",form=loginpage)
 
@@ -106,7 +106,7 @@ def signup():
         conn.close()
 
         flash('account created, Welcome {}'.format(loginpage.Username.data),"success")
-        return redirect(url_for("lnding"))
+        return redirect(url_for("login"))
     return render_template("signup.html",form=loginpage)
 
 def savefile(filedata):
@@ -184,9 +184,9 @@ def add():
         else:
             session["cart"]={}
             session["cart"][iid]=quantity
-        flash('successfully added {}, quantity {}'.format(iid,quantity),"success")
+        flash('successfully added product'.format(iid,quantity),"success")
     else:
-        flash('some issue with {} or {}'.format(iid,quantity),"warning")
+        flash('some issue with adding product',"warning")
     print(session)
     return redirect(url_for("lnding"))
 
@@ -238,9 +238,9 @@ def reset_item_count():
         else:
             session["cart"]={}
             session["cart"][iid]=quantity
-        flash('successfully changed {}\'s count to {}'.format(iid,quantity),"success")
+        flash('successfully changed product\'s count to {}'.format(quantity),"success")
     else:
-        flash('some issue with {} or {}'.format(iid,quantity),"warning")
+        flash('some issue with {} or {}'.format('product','quantity'),"warning")
     return redirect(url_for("showcart"))
 
 @app.route("/remove_item",methods=["GET","POST"])
@@ -255,9 +255,9 @@ def remove_item():
         session.modified = True
         if "cart" in session:
             session["cart"].pop(str(iid))
-        flash('successfully poped {}'.format(iid),"success")
+        flash('successfully poped {} from cart'.format('product'),"success")
     else:
-        flash('some issue with {}'.format(iid),"warning")
+        flash('some issue with poping {}'.format('product'),"warning")
     return redirect(url_for("showcart"))
 
 @app.route("/proceed_to_buy",methods=["GET","Post"])
