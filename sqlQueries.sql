@@ -14,10 +14,12 @@ CREATE TABLE product (
 
 
 create table orderlist(
+oid int unsigned not null auto_increment,
 sid int unsigned not null,
 iid int unsigned not null,
 quantity int unsigned,
 trackStatus int unsigned default(0),
+primary key(oid)
 );
 
 create table shopper(

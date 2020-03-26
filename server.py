@@ -279,7 +279,8 @@ def proceed_to_buy():
             flash('your cart was empty',"info")
     else:
         flash('login please',"info")
-    return redirect(url_for("showcart"))
+        return redirect(url_for("showcart"))
+    return redirect(url_for("booking_history"))
 
 @app.route("/booking_history",methods=["GET","Post"])
 @login_required
@@ -350,11 +351,13 @@ def view_selected_user():
                 items=[]
                 conn = mysql.connect()
                 cursor = conn.cursor(pymysql.cursors.DictCursor)
-                cursor.execute("select sid,iid,quantity,trackStatus from orderlist where sid = %s",[sid])
+                cursor.execute("select oid,sid,iid,quantity,trackStatus from orderlist where sid = %s",[sid])
                 orders=cursor.fetchall()
                 for order in orders:
                     cursor.execute("Select id,itemname,price,image from product where id = %s",[int(order.get("iid"))])
                     tmp=cursor.fetchone()
+                    tmp["oid"]=order.get("oid")
+                    tmp["sid"]=sid
                     tmp["quantity"]=order.get("quantity")
                     tmp["trackStatus"]=order.get("trackStatus")
                     tmp["stackCost"]=order.get("quantity")*tmp.get("price")
@@ -372,6 +375,48 @@ def view_selected_user():
         flash('Login required',"info")
         return redirect(url_for('lnding'))
 
+@app.route("/update_status",methods=["GET","Post"])
+@login_required
+def update_status():
+    if current_user.is_authenticated:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("Select id,is_admin from shopper where id=%s",[current_user.id])
+        result=cursor.fetchone()
+        cursor.close() 
+        conn.close()
+        if result['is_admin']== True:
+            userid=None
+            prodid=None
+            oid=None
+            if request.method=="POST":
+                userid=request.form.get("userid")
+                prodid=request.form.get("prodid")
+                oid=request.form.get("oid")
+            elif request.method=="GET":
+                userid=request.args.get("userid")
+                prodid=request.args.get("prodid")
+                oid=request.args.get("oid")
+            if userid and prodid:
+                conn = mysql.connect()
+                cursor = conn.cursor(pymysql.cursors.DictCursor)
+                cursor.execute("select oid,sid,iid,quantity,trackStatus from orderlist where sid = %s and iid = %s and oid = %s",[userid,prodid,oid])
+                order=cursor.fetchone()
+                cursor.execute("update orderlist set trackStatus=%s where oid = %s",[int(order["trackStatus"])+1, int(order["oid"]) ])
+                conn.commit()
+                cursor.close() 
+                conn.close()
+                flash('Successfully updated status',"Success")
+                return redirect(url_for('view_selected_user')+"?sid={}".format(userid))
+            else:
+                flash('updation failed',"danger")
+                return redirect(url_for('view_user_booking'))
+        else:
+            flash('requires admin login',"info")
+            return redirect(url_for('lnding'))
+    else:
+        flash('Login required',"info")
+        return redirect(url_for('lnding'))
 
 if __name__ == "__main__":
     app.run(debug=True)
