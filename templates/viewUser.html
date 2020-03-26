@@ -1,0 +1,55 @@
+{% extends "shoe_shop.html" %}
+{% block content %}
+
+<div class="container text-white">
+    {% for user in users %}
+    <div class="card mb-4 border-info rounded">
+        <div class="row no-gutters">
+            <div class="col-md-3 d-flex justify-content-center align-items-center rounded">
+                <div class="card-body">
+                    <h5 class="card-text text-white d-flex justify-content-center align-items-center">{{user.username}}</h5>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="card-body d-flex justify-content-center">
+                    <div>
+                        <p class="card-text text-white">ID : {{user.id}}</p>
+                        <p class="card-text text-white">
+                            <span> Account Type : </span>
+                            {% if user.is_admin %}
+                            <span class="badge badge-success p-1"> Admin</span>
+                            {% else %}
+                            <span class="badge badge-info p-1">User</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="card-body">
+                    <div class="form-group d-flex justify-content-center">
+                        <form action="/view_selected_user" class="text-center" method="POST">
+                            <input type="hidden" name="sid" id="sid" value={{ user.id }} >
+                            <div>
+                                <label class="text-white form-label">View User Booking</label>
+                            </div>
+                            <div>
+                                <input type="submit" id="Booking" name="Booking" value="View" class="btn btn-outline-info">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .card
+    {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+{% endblock content %}

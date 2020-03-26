@@ -1,0 +1,48 @@
+{% extends "shoe_shop.html" %}
+{% block content %}
+
+<div class="container py-1 text-white">
+    {% for item in items %}
+    <div class="card mb-3 border-info rounded">
+        <div class="row no-gutters">
+            <div class="col-md-3 d-flex justify-content-center align-items-center bg-white rounded">
+                <img src="/static/images/{{ item.image }}" style="width: auto; height: 100px" class="card-img" alt="...">
+            </div>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="card-body">
+                    <h5 class="card-title text-white">{{item.itemname}}</h5>
+                    <p class="card-text text-white">Cost : {{item.price}}</p>
+                    <p class="card-text text-white">Quantity : {{item.quantity}}</p>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="card-body">
+                    {% if item.trackStatus==0 %}
+                    <p class="card-text text-white badge badge-secondary p-1">TrackStatus : Waiting</p>
+                    {% elif item.trackStatus==1 %}
+                    <p class="card-text text-white badge badge-info p-1">TrackStatus : Packed</p>
+                    {% elif item.trackStatus==2 %}
+                    <p class="card-text text-white badge badge-info p-1">TrackStatus : Deployed</p>
+                    {% elif item.trackStatus==3 %}
+                    <p class="card-text text-white badge badge-info p-1">TrackStatus : Arrived</p>
+                    {% elif item.trackStatus==4 %}
+                    <p class="card-text text-white badge badge-success p-1">TrackStatus : Delevered</p>
+                    {% else %}
+                    <p class="card-text text-white badge badge-danger p-1">TrackStatus : Unknown</p>
+                    {% endif %}
+                    <p class="card-text text-white"><small >Stack Cost : {{item.stackCost}}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .card
+    {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+{% endblock content %}

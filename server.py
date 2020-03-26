@@ -263,39 +263,115 @@ def remove_item():
 @app.route("/proceed_to_buy",methods=["GET","Post"])
 @login_required
 def proceed_to_buy():
-    cart=session.get("cart")
-    if cart:
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        for strid,quantity in cart.items():
-            cursor.execute("insert into orderlist (sid,iid,quantity) values ( %s,%s,%s)",[current_user.id,int(strid),quantity])
-        conn.commit()
-        cursor.close() 
-        conn.close()
-        session.pop("cart",None)
-        flash('your order has been placed',"success")
+    if current_user.is_authenticated:
+        cart=session.get("cart")
+        if cart:
+            conn = mysql.connect()
+            cursor = conn.cursor(pymysql.cursors.DictCursor)
+            for strid,quantity in cart.items():
+                cursor.execute("insert into orderlist (sid,iid,quantity) values ( %s,%s,%s)",[current_user.id,int(strid),quantity])
+            conn.commit()
+            cursor.close() 
+            conn.close()
+            session.pop("cart",None)
+            flash('your order has been placed',"success")
+        else:
+            flash('your cart was empty',"info")
     else:
-        flash('your cart was empty',"info")
+        flash('login please',"info")
     return redirect(url_for("showcart"))
 
 @app.route("/booking_history",methods=["GET","Post"])
 @login_required
 def booking_history():
-    items=[]
-    conn = mysql.connect()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("select sid,iid,quantity,trackStatus from orderlist where sid = %s",[current_user.id])
-    orders=cursor.fetchall()
-    for order in orders:
-        cursor.execute("Select id,itemname,price,image from product where id = %s",[int(order.get("iid"))])
-        tmp=cursor.fetchone()
-        tmp["quantity"]=order.get("quantity")
-        tmp["trackStatus"]=order.get("trackStatus")
-        tmp["stackCost"]=order.get("quantity")*tmp.get("price")
-        items.append(tmp.copy())
-    cursor.close()
-    conn.close()
-    return render_template("history.html",items=items)
+    if current_user.is_authenticated:
+        items=[]
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("select sid,iid,quantity,trackStatus from orderlist where sid = %s",[current_user.id])
+        orders=cursor.fetchall()
+        for order in orders:
+            cursor.execute("Select id,itemname,price,image from product where id = %s",[int(order.get("iid"))])
+            tmp=cursor.fetchone()
+            tmp["quantity"]=order.get("quantity")
+            tmp["trackStatus"]=order.get("trackStatus")
+            tmp["stackCost"]=order.get("quantity")*tmp.get("price")
+            items.append(tmp.copy())
+        cursor.close()
+        conn.close()
+        return render_template("history.html",items=items)
+    else:
+        flash('Login required',"info")
+    return redirect(url_for('lnding'))
+
+@app.route("/view_user_booking",methods=["GET","Post"])
+@login_required
+def view_user_booking():
+    if current_user.is_authenticated:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("Select id,is_admin from shopper where id=%s",[current_user.id])
+        result=cursor.fetchone()
+        cursor.close() 
+        conn.close()
+        if result['is_admin']== True:
+            conn = mysql.connect()
+            cursor = conn.cursor(pymysql.cursors.DictCursor)
+            cursor.execute("Select id,username,is_admin from shopper")
+            users=cursor.fetchall()
+            cursor.close() 
+            conn.close()
+            return render_template("viewUser.html",users=users)
+        else:
+            flash('requires admin login',"info")
+            return redirect(url_for('lnding'))
+    else:
+        flash('Login required',"info")
+        return redirect(url_for('lnding'))
+
+
+@app.route("/view_selected_user",methods=["GET","Post"])
+@login_required
+def view_selected_user():
+    if current_user.is_authenticated:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("Select id,is_admin from shopper where id=%s",[current_user.id])
+        result=cursor.fetchone()
+        cursor.close() 
+        conn.close()
+        if result['is_admin']== True:
+            sid=None
+            if request.method=="POST":
+                sid=request.form.get("sid")
+            elif request.method=="GET":
+                sid=request.args.get("sid")
+            if sid:
+                items=[]
+                conn = mysql.connect()
+                cursor = conn.cursor(pymysql.cursors.DictCursor)
+                cursor.execute("select sid,iid,quantity,trackStatus from orderlist where sid = %s",[sid])
+                orders=cursor.fetchall()
+                for order in orders:
+                    cursor.execute("Select id,itemname,price,image from product where id = %s",[int(order.get("iid"))])
+                    tmp=cursor.fetchone()
+                    tmp["quantity"]=order.get("quantity")
+                    tmp["trackStatus"]=order.get("trackStatus")
+                    tmp["stackCost"]=order.get("quantity")*tmp.get("price")
+                    items.append(tmp.copy())
+                cursor.close()
+                conn.close()
+                return render_template("viewUserBooking.html",items=items)
+            else:
+                flash('no user selected',"info")
+                redirect(url_for('view_user_booking'))
+        else:
+            flash('requires admin login',"info")
+            return redirect(url_for('lnding'))
+    else:
+        flash('Login required',"info")
+        return redirect(url_for('lnding'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
