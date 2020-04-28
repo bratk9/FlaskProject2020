@@ -112,7 +112,7 @@ def signup():
 def savefile(filedata):
     conn = mysql.connect()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("Select count(*) as last from product")
+    cursor.execute("Select max(id) as last from product")
     result=cursor.fetchone()
     cursor.close() 
     conn.close()
@@ -419,4 +419,4 @@ def update_status():
         return redirect(url_for('lnding'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
