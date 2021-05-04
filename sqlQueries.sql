@@ -38,5 +38,5 @@ INSERT INTO `product` ( `itemname`, `image`, `price`) VALUES
 ( 'Puma Men\'s Movemax Running Shoes', 'shoes/5.jpg', 1999.00),
 ('Skechers Women\'s Go Walk Walking Shoes', 'shoes/6.jpg', 4299.00);
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 FLUSH PRIVILEGES;
