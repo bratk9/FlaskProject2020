@@ -7,7 +7,7 @@ import pymysql
 
 itemPrint=Blueprint("itemPrint",__name__)
 
-@itemPrint.route("/addProduct",methods=["GET","POST"])
+@itemPrint.route("/admin/shop/add",methods=["GET","POST"])
 @login_required
 def addProduct():
     if current_user.is_authenticated:

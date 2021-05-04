@@ -38,7 +38,7 @@
             <div class="col-md-2 d-flex justify-content-center align-items-center">
                 <div class="card-body">
                     <div class="card-text text-center form-group">
-                        <form action="/reset_item_count" method="POST">
+                        <form action="{{ url_for('userPrint.reset_item_count') }}" method="POST">
                             <label for="Quantity" class="text-white form-label">Quantity</label>
                             <input class="form-control text-white bg-transparent border border-info rounded-pill text-center mb-2" type="number" name="Quantity" id="Quantity" min=0 value="{{item.quantity}}">
                             <input type="hidden" name="id" id="id" value="{{ item.id }}"/>
@@ -50,7 +50,7 @@
             <div class="col-md-2 d-flex justify-content-center align-items-center">
                 <div class="card-body">
                     <div class="card-text text-center form-group">
-                        <form action="/remove_item" method="POST">
+                        <form action="{{ url_for('userPrint.remove_item') }}" method="POST">
                             <input type="hidden" name="id" id="id" value="{{ item.id }}"/>
                             <input type="submit" value="Remove" class="btn btn-outline-info">
                         </form>
@@ -75,7 +75,7 @@
             <div class="col-md-6 d-flex justify-content-center align-items-center">
                 <div class="card-body">
                     <div class="card-text text-center form-group">
-                        <form action="/proceed_to_buy" method="POST">
+                        <form action="{{ url_for('userPrint.proceed_to_buy') }}" method="POST">
                             <input type="submit" value="Proceed to Buy" class="btn btn-outline-info">
                         </form>
                     </div>

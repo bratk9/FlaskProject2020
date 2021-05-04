@@ -7,12 +7,12 @@ import pymysql
 
 userPrint=Blueprint("userPrint",__name__)
 
-@userPrint.route("/logout")
+@userPrint.route("/user/logout")
 def logout():
     logout_user()
     return redirect(url_for("mainPrint.lnding"))
 
-@userPrint.route("/login",methods=["GET","POST"])
+@userPrint.route("/user/login",methods=["GET","POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("mainPrint.lnding"))
@@ -40,7 +40,7 @@ def login():
         
     return render_template("Login.html",form=loginpage)
 
-@userPrint.route("/signup",methods=["GET","POST"])
+@userPrint.route("/user/signup",methods=["GET","POST"])
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for("mainPrint.lnding"))
@@ -63,7 +63,7 @@ def signup():
     return render_template("signup.html",form=loginpage)
 
 
-@userPrint.route("/add",methods=["GET","POST"])
+@userPrint.route("/cart/add",methods=["GET","POST"])
 def add():
     iid=None
     quantity=None
@@ -91,7 +91,7 @@ def add():
     print(session)
     return redirect(url_for("mainPrint.lnding"))
 
-@userPrint.route("/showcart",methods=["GET","POST"])
+@userPrint.route("/cart/show",methods=["GET","POST"])
 def showcart():
     cart=session.get("cart")
     result=[]
@@ -119,7 +119,7 @@ def showcart():
 #     session.pop("cart",None)
 #     return session.get("cart") if session.get("cart") else "none"
 
-@userPrint.route("/reset_item_count",methods=["GET","POST"])
+@userPrint.route("/cart/reset",methods=["GET","POST"])
 def reset_item_count():
     iid=None
     quantity=None
@@ -144,7 +144,7 @@ def reset_item_count():
         flash('some issue with {} or {}'.format('product','quantity'),"warning")
     return redirect(url_for("userPrint.showcart"))
 
-@userPrint.route("/remove_item",methods=["GET","POST"])
+@userPrint.route("/cart/remove",methods=["GET","POST"])
 def remove_item():
     iid=None
     if request.method=="POST":
@@ -161,7 +161,7 @@ def remove_item():
         flash('some issue with poping {}'.format('product'),"warning")
     return redirect(url_for("userPrint.showcart"))
 
-@userPrint.route("/proceed_to_buy",methods=["GET","Post"])
+@userPrint.route("/cart/buy",methods=["GET","Post"])
 @login_required
 def proceed_to_buy():
     if current_user.is_authenticated:
@@ -183,7 +183,7 @@ def proceed_to_buy():
         return redirect(url_for("userPrint.showcart"))
     return redirect(url_for("userPrint.booking_history"))
 
-@userPrint.route("/booking_history",methods=["GET","Post"])
+@userPrint.route("/user/history",methods=["GET","Post"])
 @login_required
 def booking_history():
     if current_user.is_authenticated:
@@ -206,7 +206,7 @@ def booking_history():
         flash('Login required',"info")
     return redirect(url_for('mainPrint.lnding'))
 
-@userPrint.route("/view_user_booking",methods=["GET","Post"])
+@userPrint.route("/admin/user/show-all",methods=["GET","Post"])
 @login_required
 def view_user_booking():
     if current_user.is_authenticated:
@@ -232,7 +232,7 @@ def view_user_booking():
         return redirect(url_for('mainPrint.lnding'))
 
 
-@userPrint.route("/view_selected_user",methods=["GET","Post"])
+@userPrint.route("/admin/user/show-specific",methods=["GET","Post"])
 @login_required
 def view_selected_user():
     if current_user.is_authenticated:
@@ -276,7 +276,7 @@ def view_selected_user():
         flash('Login required',"info")
         return redirect(url_for('userPrint.mainPrint.lnding'))
 
-@userPrint.route("/update_status",methods=["GET","Post"])
+@userPrint.route("/admin/user/update-order",methods=["GET","Post"])
 @login_required
 def update_status():
     if current_user.is_authenticated:

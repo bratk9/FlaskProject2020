@@ -32,7 +32,7 @@
                     {% endif %}
                     <p class="card-text text-white"><small >Stack Cost : {{item.stackCost}}</small></p>
                     {% if item.trackStatus<4 and item.trackStatus >=0 %}
-                        <form action="/update_status" method="post">
+                        <form action="{{ url_for('userPrint.update_status') }}" method="post">
                             <input type="hidden" name="prodid" id="prodid" value={{ item.id }} >
                             <input type="hidden" name="userid" id="userid" value={{ item.sid }} >
                             <input type="hidden" name="oid" id="oid" value={{ item.oid }} >

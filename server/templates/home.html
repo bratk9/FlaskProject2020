@@ -12,7 +12,7 @@
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4">
             {% for product in products %}
             <div class="col py-2">
-                <form class="card text-white  border-info h-100" action="/add" method="POST">
+                <form class="card text-white  border-info h-100" action="{{ url_for('userPrint.add') }}" method="POST">
                     <div class="d-flex justify-content-center rounded bg-white">
                         <img src="/static/images/{{ product.image }}" style="width: auto; height: 100px" class="card-img-top" alt="{{ product.image }}">
                     </div>
