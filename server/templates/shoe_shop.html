@@ -50,14 +50,14 @@
               </div>
 
             <nav class="navbar sticky-top navbar-expand-md navbar-dark" style="background-color: rgba(0, 0, 0, 0.75);z-index:1;">
-                <a class="navbar-brand" href="{{ url_for('lnding') }}">Shoe Shop</a>
+                <a class="navbar-brand" href="{{ url_for('mainPrint.lnding') }}">Shoe Shop</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-info" href="{{ url_for('lnding') }}">Home</a>
+                            <a class="nav-link text-info" href="{{ url_for('mainPrint.lnding') }}">Home</a>
                         </li>
                         {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
@@ -66,7 +66,7 @@
                                 Product Dashboard
                             </a>
                             <div class="dropdown-menu custom-bg-translucent" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item text-info" href="{{ url_for('addProduct') }}">Add Products</a>
+                                    <a class="dropdown-item text-info" href="{{ url_for('itemPrint.addProduct') }}">Add Products</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -74,7 +74,7 @@
                                 User Dashboard
                             </a>
                             <div class="dropdown-menu custom-bg-translucent" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item text-info" href="{{ url_for('view_user_booking') }}">
+                                <a class="dropdown-item text-info" href="{{ url_for('userPrint.view_user_booking') }}">
                                     View user booking
                                 </a>
                             </div>
@@ -90,28 +90,25 @@
                                 {{current_user.username}}
                             </a>
                             <div class="dropdown-menu custom-bg-translucent" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item text-info" href="{{ url_for('booking_history') }}">History</a>
-                                    <a class="dropdown-item text-info" href="{{ url_for('logout') }}">Logout</a>
+                                    <a class="dropdown-item text-info" href="{{ url_for('userPrint.booking_history') }}">History</a>
+                                    <a class="dropdown-item text-info" href="{{ url_for('userPrint.logout') }}">Logout</a>
                             </div>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link text-info" href="{{ url_for('login') }}">Login</a>
+                            <a class="nav-link text-info" href="{{ url_for('userPrint.login') }}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-info" href="{{ url_for('signup') }}">Signup</a>
+                            <a class="nav-link text-info" href="{{ url_for('userPrint.signup') }}">Signup</a>
                         </li>
                         {% endif%}
                         <li class="nav-item">
-                            <a class="nav-link text-info" href="{{ url_for('showcart') }}">My Cart</a>
+                            <a class="nav-link text-info" href="{{ url_for('userPrint.showcart') }}">My Cart</a>
                         </li>
                     </ul>
                   </div>
             </nav>
 
-
-            
-        
             <script>
                 $(document).ready(function()
                     {
