@@ -5,9 +5,9 @@ from server.items.form import addItemForm
 from server.utils import savefile
 import pymysql
 
-itemPrint=Blueprint("itemPrint",__name__)
+itemPrint=Blueprint("itemPrint",__name__,url_prefix="/shop")
 
-@itemPrint.route("/admin/shop/add",methods=["GET","POST"])
+@itemPrint.route("/add",methods=["GET","POST"])
 @login_required
 def addProduct():
     if current_user.is_authenticated:

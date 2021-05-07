@@ -4,9 +4,9 @@ from flask_login import login_required,current_user
 
 import pymysql
 
-cartPrint=Blueprint("cartPrint",__name__)
+cartPrint=Blueprint("cartPrint",__name__,url_prefix="/cart")
 
-@cartPrint.route("/cart/add",methods=["GET","POST"])
+@cartPrint.route("/add",methods=["GET","POST"])
 def add():
     iid=None
     quantity=None
@@ -34,7 +34,7 @@ def add():
     print(session)
     return redirect(url_for("mainPrint.lnding"))
 
-@cartPrint.route("/cart/show",methods=["GET","POST"])
+@cartPrint.route("/show",methods=["GET","POST"])
 def showcart():
     cart=session.get("cart")
     result=[]
@@ -57,7 +57,7 @@ def showcart():
     return render_template("cart.html",items=result,totalCost=totalCost)
 
 
-@cartPrint.route("/cart/reset",methods=["GET","POST"])
+@cartPrint.route("/reset",methods=["GET","POST"])
 def reset_item_count():
     iid=None
     quantity=None
@@ -82,7 +82,7 @@ def reset_item_count():
         flash('some issue with {} or {}'.format('product','quantity'),"warning")
     return redirect(url_for("cartPrint.showcart"))
 
-@cartPrint.route("/cart/remove",methods=["GET","POST"])
+@cartPrint.route("/remove",methods=["GET","POST"])
 def remove_item():
     iid=None
     if request.method=="POST":
@@ -99,7 +99,7 @@ def remove_item():
         flash('some issue with poping {}'.format('product'),"warning")
     return redirect(url_for("cartPrint.showcart"))
 
-@cartPrint.route("/cart/buy",methods=["GET","Post"])
+@cartPrint.route("/buy",methods=["GET","Post"])
 @login_required
 def proceed_to_buy():
     if current_user.is_authenticated:

@@ -4,9 +4,9 @@ from server import mysql
 
 import pymysql
 
-adminPrint=Blueprint("adminPrint", __name__)
+adminPrint=Blueprint("adminPrint", __name__,url_prefix="/admin")
 
-@adminPrint.route("/admin/user/show-all",methods=["GET","Post"])
+@adminPrint.route("/user/show-all",methods=["GET","Post"])
 @login_required
 def view_user_booking():
     if current_user.is_authenticated:
@@ -32,7 +32,7 @@ def view_user_booking():
         return redirect(url_for('mainPrint.lnding'))
 
 
-@adminPrint.route("/admin/user/show-specific",methods=["GET","Post"])
+@adminPrint.route("/user/show-specific",methods=["GET","Post"])
 @login_required
 def view_selected_user():
     if current_user.is_authenticated:
@@ -76,7 +76,7 @@ def view_selected_user():
         flash('Login required',"info")
         return redirect(url_for('mainPrint.lnding'))
 
-@adminPrint.route("/admin/user/update-order",methods=["GET","Post"])
+@adminPrint.route("/user/update-order",methods=["GET","Post"])
 @login_required
 def update_status():
     if current_user.is_authenticated:
